@@ -1,57 +1,52 @@
 <script>
-	import Rule from './_inc/_rule.svelte'
+	import Rule from './_rule.svelte'
 	import { toClipboard } from 'copee';	
 	import { onMount } from 'svelte'
-	import FormInput from './_inc/_input.svelte'
+	import FormInput from './_input.svelte'
 
 	// export let metatags = {}
 	let metatags = {}
 	let mt = {}
-	let url = ''
-	let promiseMetatags = getMetatag()
+	let url = 'https://lugodev.medium.com'
+	let disabled = false
+	$: ({ 
+			title = '',
+			description = '',
+			creator = '',
+			og_image = '',
+			og_description = '',
+			og_locale = '',
+			twitter_image = '',
+			apple_touch_icon = '',
+			icon180x180 = '',
+			icon32x32 = '',
+			icon16x16 = '',
+		} = metatags)
 
 	async function getMetatag() {
-		if (!url) return []
-		const res = await fetch(`/validate/${url.replace(/^https?:\/\//,'')}`)
+		disabled = 1
+		const res = await fetch(`/metatags.json?url=${url}`)
+		disabled = 0
 		if (!res.ok) return null
-		return await res.json()
+		metatags = await res.json()
+		mt=metatags
 	}
 
-	async function handleSubmit() {
-		promiseMetatags = getMetatag()
+	async function save(argument) {
+		// body...
 	}
 
 </script>
 
-<div class="w-1/2 mx-auto text-lg">
+<div class="w-1/2 mx-auto">
 	<h2 class="text-3xl mb-8 font-semibold">
 		Validador <i>meta tag</i>
 	</h2>
-	<form on:submit|preventDefault={handleSubmit} class="sticky top-0">
-		<input 
-			bind:value={url}
-			class="text-gray-800 px-4 py-3 hover:outline-none w-full disabled:text-gray-400 border" 
-		/>		
-		<!-- <FormInput bind:value={url} label="URL" /> -->
+	<form on:submit|preventDefault={getMetatag}>
+		<input type="text" name="url" bind:value={url} placeholder="type url">
 	</form>
-		{#await promiseMetatags }
-			<p>Testing...</p>
-		{:then metatags}
-			<div class="my-16 divide-y-2 bg-white border">
-				{#each metatags as {title, rules}, index}
-				<div class="divide-y py-4">
-					<div class="px-4 py-3 font-semibold">
-						{title}
-					</div>
-					{#each rules as rule, index}
-						<Rule tag={rule} />			
-					{/each}
-				</div>
-				{/each}
-			</div>
-		{/await}
 	<!-- https://ahrefs.com/blog/open-graph-meta-tags/ -->
-<!-- 	{#if JSON.stringify(metatags) !== '{}'}
+	{#if JSON.stringify(metatags) !== '{}'}
 		<div class="space-y-4 ">
 			<Rule 
 				condition={!!title} 
@@ -108,7 +103,7 @@
 			/>
 		</div>
 		
-	{/if} -->
+	{/if}
 	
 </div>
 
