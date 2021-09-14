@@ -25,13 +25,14 @@
 
 <div class="w-1/2 mx-auto text-lg">
 	<div class="py-32">
-		<h1 class="text-5xl text-center mb-8 font-extrabold ">
+		<h1 class="text-7xl text-center mb-8 leading-snug">
 			<span class="text-lime-500">Free SEO Checker</span> <br>of your website
 		</h1>
 		<p></p>
 		<form on:submit|preventDefault={handleSubmit} class="sticky top-0 py-2 bg-trueGray-50">
 			<input 
 				bind:value={url}
+				placeholder="Website URL"
 				class="text-gray-800 px-4 py-3 hover:outline-none w-full disabled:text-gray-400 border" 
 			/>		
 			<!-- <FormInput bind:value={url} label="URL" /> -->
