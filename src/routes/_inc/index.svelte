@@ -1,23 +1,39 @@
 <script>
-	import Rule from './_inc/_rule.svelte'
+	import Rule from './_rule.svelte'
 	import { toClipboard } from 'copee';	
 	import { onMount } from 'svelte'
-	import FormInput from './_inc/_input.svelte'
+	import FormInput from './_input.svelte'
 
 	// export let metatags = {}
 	let metatags = {}
 	let mt = {}
 	let url = 'https://lugodev.medium.com'
-	let promiseMetatags = getMetatag()
+	let disabled = false
+	$: ({ 
+			title = '',
+			description = '',
+			creator = '',
+			og_image = '',
+			og_description = '',
+			og_locale = '',
+			twitter_image = '',
+			apple_touch_icon = '',
+			icon180x180 = '',
+			icon32x32 = '',
+			icon16x16 = '',
+		} = metatags)
 
 	async function getMetatag() {
-		const res = await fetch(`/validate.json?url=${url}`)
+		disabled = 1
+		const res = await fetch(`/metatags.json?url=${url}`)
+		disabled = 0
 		if (!res.ok) return null
-		return await res.json()
+		metatags = await res.json()
+		mt=metatags
 	}
 
-	async function handleSubmit(argument) {
-		promiseMetatags = getMetatag()
+	async function save(argument) {
+		// body...
 	}
 
 </script>
@@ -27,28 +43,10 @@
 		Validador <i>meta tag</i>
 	</h2>
 	<form on:submit|preventDefault={getMetatag}>
-		<FormInput bind:value={url} label="URL" />
+		<input type="text" name="url" bind:value={url} placeholder="type url">
 	</form>
-
-	<div class="my-16 space-y-6">
-		{#await promiseMetatags }
-			<p>Validating</p>
-		{:then metatags}
-			{#each metatags as {title, rules}, index}
-			<div class="space-y-2">
-				{title}
-				{#each rules as rule, index}
-					<Rule 
-						condition={!!rule.value} 
-						title={rule.title} 
-					/>			
-				{/each}
-			</div>
-			{/each}
-		{/await}
-	</div>
 	<!-- https://ahrefs.com/blog/open-graph-meta-tags/ -->
-<!-- 	{#if JSON.stringify(metatags) !== '{}'}
+	{#if JSON.stringify(metatags) !== '{}'}
 		<div class="space-y-4 ">
 			<Rule 
 				condition={!!title} 
@@ -105,7 +103,7 @@
 			/>
 		</div>
 		
-	{/if} -->
+	{/if}
 	
 </div>
 
