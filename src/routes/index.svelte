@@ -8,7 +8,7 @@
 	let metatags = {}
 	let mt = {}
 	let url = ''
-	let promiseMetatags = getMetatag()
+	let promiseMetatags = null
 
 	async function getMetatag() {
 		if (!url) return []
@@ -24,169 +24,45 @@
 </script>
 
 <div class="w-1/2 mx-auto text-lg">
-	<h2 class="text-3xl mb-8 font-semibold">
-		Validador <i>meta tag</i>
-	</h2>
-	<form on:submit|preventDefault={handleSubmit} class="sticky top-0">
-		<input 
-			bind:value={url}
-			class="text-gray-800 px-4 py-3 hover:outline-none w-full disabled:text-gray-400 border" 
-		/>		
-		<!-- <FormInput bind:value={url} label="URL" /> -->
-	</form>
+	<div class="py-32">
+		<h1 class="text-5xl text-center mb-8 font-extrabold ">
+			<span class="text-lime-500">Free SEO Checker</span> <br>of your website
+		</h1>
+		<p></p>
+		<form on:submit|preventDefault={handleSubmit} class="sticky top-0 py-2 bg-trueGray-50">
+			<input 
+				bind:value={url}
+				class="text-gray-800 px-4 py-3 hover:outline-none w-full disabled:text-gray-400 border" 
+			/>		
+			<!-- <FormInput bind:value={url} label="URL" /> -->
+		</form>
 		{#await promiseMetatags }
-			<p>Testing...</p>
+		<div class="my-12 ">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-trueGray-400 animate-spin mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+			  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+			</svg>		
+		</div>
 		{:then metatags}
-			<div class="my-16 divide-y-2 bg-white border">
+		{#if !!metatags}
+			<div class="my-12 divide-y-2 bg-white border">
 				{#each metatags as {title, rules}, index}
-				<div class="divide-y py-4">
-					<div class="px-4 py-3 font-semibold">
-						{title}
-					</div>
+				<div class="divide-y">
+					{#if title}
+						<div class="px-4 py-3 font-semibold">
+							{title}
+						</div>
+					{/if}
 					{#each rules as rule, index}
 						<Rule tag={rule} />			
 					{/each}
 				</div>
 				{/each}
 			</div>
+		{/if}
 		{/await}
-	<!-- https://ahrefs.com/blog/open-graph-meta-tags/ -->
-<!-- 	{#if JSON.stringify(metatags) !== '{}'}
-		<div class="space-y-4 ">
-			<Rule 
-				condition={!!title} 
-				title="Titulo" 
-			/>
-			<Rule 
-				condition={ title.length > 4 && title.length <= 60 } 
-				title="Logintud del título entre 4 y 60 caracteres"
-			/>
-			<Rule 
-				condition={ title.split(' ').every( word => /[A-Z]/.test(word[0]))} 
-				title="Uso de mayúsculas en la primera letra de cada palabra del título"
-			/>
-			<Rule 
-				condition={ !!description } 
-				title="Descripción"
-			/>
-			<Rule 
-				condition={ description === og_description } 
-				title="Descripción igual al Open Graph"
-			/>
-			<div>
-				<a href="https://moz.com/blog/the-ultimate-guide-to-seo-meta-tags">The Ultimate Guide to SEO Meta Tags</a>
-				<a href="https://moz.com/blog/meta-data-templates-123">Must-Have Social Meta Tags for Twitter, Google, Facebook, & More</a>
-				<a href="https://ahrefs.com/blog/open-graph-meta-tags/">Open Graph Meta Tags: Everything You Need to Know</a>
-			</div>
-			<Rule 
-				condition={ !!og_image } 
-				title="Imagen Open Graph"
-			/>
-			<Rule 
-				condition={ !!twitter_image } 
-				title="Twitter Image"
-			/>
-			<div>
-				Icons
-				<p>https://github.com/audreyfeldroy/favicon-cheat-sheet</p>
-			</div>
-			<Rule 
-				condition={ !!apple_touch_icon } 
-				title="Apple Icon"
-			/>
-			<Rule 
-				condition={ !!icon180x180 } 
-				title="Icon 180x180"
-			/>
-			<Rule 
-				condition={ !!icon32x32 } 
-				title="Icon 32x32"
-			/>
-			<Rule 
-				condition={ !!icon16x16 } 
-				title="Icon 16x16"
-			/>
-		</div>
-		
-	{/if} -->
+	</div>
+
 	
 </div>
 
-
-<!--  -->
-<!-- <div class="grid grid-cols-3 gap-6"> -->
-<!-- 	<div class="space-y-3"> -->
-<!-- 		 -->
-<!-- 		<FormInput bind:value={url} label="URL" on:input={getMetatag}/> -->
-<!-- 		<FormInput bind:value={title} label="Título" {disabled}/> -->
-<!-- 		<FormInput bind:value={description} label="Descripción" rows="{5}" {disabled}/> -->
-<!-- 		<FormInput bind:value={image} label="Image" {disabled}/> -->
-<!-- 		<FormInput bind:value={creator} label="Autor" {disabled}/> -->
-		<!-- <FormInput bind:value={font} label="Google Font" {disabled}/> -->
-<!-- 		<button on:click={save} class="flex items-center font-semibold py-3 px-6 border"> -->
-<!-- 			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> -->
-<!-- 			  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /> -->
-<!-- 			</svg>			 -->
-<!-- 			Copiar HTML -->
-<!-- 		</button> -->
-<!-- 	</div> -->
-<!-- 	<div class="col-span-2"> -->
-<!-- <pre class="overflow-auto p-5 text-blue-500 border"><code class="language-html"> -->
-<!-- &lt;!-- Primary Meta Tags --> 
-<!-- &lt;title>{title}&lt;/title> -->
-<!-- &lt;meta name="title" content="{title}"> -->
-<!--  -->
-<!-- <span class="{ !description ? 'text-red-500' : '' }" > -->
-<!-- &lt;meta name="description" content="{description}"> -->
-<!-- </span> -->
-<!--  -->
-<!-- &lt;!-- Open Graph / Facebook -->
-<!-- <span class="{ !og_image ? 'text-red-500' : '' }" > -->
-<!-- &lt;meta property="og:type" content="website"> -->
-<!-- &lt;meta property="og:url" content="{url}"> -->
-<!-- &lt;meta property="og:title" content="{title}"> -->
-<!-- &lt;meta property="og:description" content="{description}"> -->
-<!-- &lt;meta property="og:image" content="{image}"> -->
-<!-- </span> -->
-<!--  -->
-<!-- <span class="{ !twitter_image ? 'text-red-500' : '' }" > -->
-<!-- &lt;!-- Twitter -->
-<!-- &lt;meta property="twitter:card" content="summary_large_image"> -->
-<!-- &lt;meta property="twitter:url" content="{url}"> -->
-<!-- &lt;meta property="twitter:title" content="{title}"> -->
-<!-- &lt;meta property="twitter:description" content="{description}"> -->
-<!-- &lt;meta property="twitter:image" content="{image}"> -->
-<!-- </span> -->
-<!-- <span class="{ !creator ? 'text-red-500' : '' }" > -->
-<!-- 	&lt;meta name="twitter:creator" content="{creator}"> -->
-<!-- </span> -->
-<!--  -->
-<!-- &lt;!-- Favicon --> 
-<!-- <span class="{ !apple_touch_icon ? 'text-red-500' : '' }"> -->
-<!-- &lt;link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"> -->
-<!-- </span> -->
-<!-- <span class="{ !icon32x32 ? 'text-red-500' : '' }"> -->
-<!-- &lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"> -->
-<!-- </span> -->
-<!-- <span class="{ !icon16x16 ? 'text-red-500' : '' }"> -->
-<!-- &lt;link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> -->
-<!-- </span> -->
-<!-- &lt;link rel="manifest" href="/site.webmanifest"> -->
-<!-- &lt;link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"> -->
-<!-- &lt;meta name="msapplication-TileColor" content="#da532c"> -->
-<!-- &lt;meta name="theme-color" content="#ffffff"> -->
-<!--  -->
-<!-- &lt;!-- RSS --> 
-<!-- &lt;link rel="alternate" type="application/rss+xml" href="/feed.xml" title="{title}" /> -->
-<!-- &lt;link rel="alternate" type="application/rss+json" href="/feed.json" title="{title}" /> -->
-<!--  -->
-<!-- {#if font} -->
-<!-- &lt;!-- Google Font --> 
-<!-- &lt;link rel="preconnect" href="https://fonts.googleapis.com"> -->
-<!-- &lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
-<!-- &lt;link href="https://fonts.googleapis.com/css2?family={font}:wght@100&display=swap" rel="stylesheet">  -->
-<!-- {/if} -->
-<!-- </code></pre> -->
-<!-- 		 -->
-<!-- 	</div> -->
-<!-- </div> -->

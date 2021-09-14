@@ -20,10 +20,10 @@
 		</div>
 		<div class="space-y-2 mt-4">
 			<div>{tag.info}</div>
-			{#each rules as rule, index}
+			{#each rules as {name,value}, index}
 				<div class="rule-title">
-					<CheckIcon valid={!!rule.value} size="4"/>
-					<div>{rule.name}</div>
+					<CheckIcon valid={!!value} size="4"/>
+					<div>{name}</div>
 				</div>
 			{/each}
 		</div>

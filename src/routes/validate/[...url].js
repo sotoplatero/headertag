@@ -17,7 +17,6 @@ export async function get({params}) {
 	return {
 		body: [
 			{ 
-				title: 'general',
 				rules: [
 					{
 						name: 'Meta content type',
@@ -39,7 +38,8 @@ export async function get({params}) {
 
 			},{ 
 
-				title: 'seo',
+				title: 'Common SEO',
+				ref: 'https://ahrefs.com/blog/seo-basics/',
 				rules: [
 					{
 						name: "Title",
@@ -73,7 +73,7 @@ export async function get({params}) {
 				title: 'Open Graph Meta Tags',
 				// title: 'Open Graph Meta Tags',
 				// description: "Open Graph meta tags are snippets of code that control how URLs are displayed when shared on social media",
-				// ref: 'https://ahrefs.com/blog/open-graph-meta-tags/',
+				ref: 'https://ahrefs.com/blog/open-graph-meta-tags/',
 				rules: [
 					{
 						name: 'og:title',
@@ -104,7 +104,7 @@ export async function get({params}) {
 
 			}, 
 			{
-				title: "Titter Cards",
+				title: "Twitter Cards",
 				ref: 'https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started',
 				rules: [
 					{
@@ -119,13 +119,14 @@ export async function get({params}) {
 					},{
 						name: 'twitter:site',
 						info: '@username for the content creator / author.',
-						value: $('meta[name="twitter:site"]')?.attr('content'),
+						value: $('meta[name="twitter:user"]')?.attr('content'),
 						required: false,
 					}
 				]
 			},
 			{
-				title: 'icons',
+				title: 'Favicons',
+				ref: 'https://github.com/audreyfeldroy/favicon-cheat-sheet',
 				rules: [
 					{
 						name: 'msapplication-TileImage',
