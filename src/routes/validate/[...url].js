@@ -46,6 +46,12 @@ export async function get({params}) {
 						info: "The title tag is the first thing a potential visitor will take notice of when performing a search and Google (and other search engines) look at your title tag, amongst other things, to help make sense of your page",
 						value: $('title')?.text(),
 						ref: 'https://ahrefs.com/blog/title-tag-seo/',
+						rules: [
+							{
+								name: 'Keep Title tags short < 70 characters',
+								value: ( $('title')?.text()?.length < 70 )
+							}
+						],						
 					},{
 						name: 'Description',
 						info: "Describe what a page is about. It can appear in search results as a snippet under the title tag to provide more context",
@@ -69,7 +75,6 @@ export async function get({params}) {
 				]
 
 			},{ 
-
 				title: 'Open Graph Meta Tags',
 				// title: 'Open Graph Meta Tags',
 				// description: "Open Graph meta tags are snippets of code that control how URLs are displayed when shared on social media",
@@ -117,7 +122,7 @@ export async function get({params}) {
 						value: $('meta[name="twitter:site"]')?.attr('content'),
 						required: false,
 					},{
-						name: 'twitter:site',
+						name: 'twitter:user',
 						info: '@username for the content creator / author.',
 						value: $('meta[name="twitter:user"]')?.attr('content'),
 						required: false,

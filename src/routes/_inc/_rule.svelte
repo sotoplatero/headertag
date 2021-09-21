@@ -2,11 +2,21 @@
 	import CheckIcon from '$lib/checkicon.svelte'
 	export let tag = {}
 	// $: console.log(tag)
+	function validateRules() {
+		const counterTrues = tag.rules.reduce( (acc,curr) => (acc + !!curr.value), 0 )
+		if (counterTrues > 0 && counterTrues < tag.rules.length) return -1
+		return ( counterTrues === tag.rules.length ) ? 1 : 0
+	}
+
 	$: rules = tag.rules || []
+	$: valid = Array.isArray(tag.rules) 
+		? validateRules()
+		: (!!tag.value ? 1 : 0)
+
 </script>
 <div class="rule">
 	<div class="rule-title col-span-2">
-		<CheckIcon valid={!!tag.value } />
+		<CheckIcon {valid} />
 		<div class="title">
 			{tag.name}
 			{#if tag.ref}
